@@ -1,0 +1,278 @@
+\documentclass[14pt, a2paper, portrait,innermargin=5mm,
+blockverticalspace=5mm, colspace=5mm, subcolspace=3mm]{tikzposter}
+% font size: The size of the text in the main body may be set as : 12pt, 14pt, 17pt, 20pt, or 25pt;
+% paper size: Currently, paper sizes may be set to : a0paper, a1paper, or a2paper;
+% orientation: Either landscape or portrait
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{rustic}
+\usepackage{lmodern}
+\usepackage[sfdefault,lf]{carlito}
+\usepackage{fontawesome}
+\usepackage{blindtext}
+\usepackage{comment}
+\usepackage{hyperref}
+
+
+\usepackage{listings}
+
+\usetheme{Simple}
+%\usetitlestyle{Empty}\usebackgroundstyle{Empty}
+
+%--------------------------------------
+%-------------- FARBEN
+
+\usepackage[usenames, dvipsnames]{color} % um diese Color-Names zu verwenden: https://de.sharelatex.com/learn/Using_colours_in_LaTeX#!#Reference_guide z.B. \color{RubineRed}
+
+\definecolor{GrafRed}{RGB}{102,0,34} %#660022
+\definecolor{GrafBeige}{RGB}{226,212,186}
+
+\definecolor{LightGrafRed}{RGB}{152,51,85} %#A3244E
+
+%---------------- bei den Farben gibt es immer bg und fg, wobei bg Hintergrund und fg normalerweise Schriftfarbe ist. Dies ist zu definieren für backgroundcolor, framecolor, dann für titlefg/bgcolor, selbiges für (inner)blocktitle und blockbody, und ggf. für notefg/bgcolor
+\colorlet{titlebgcolor}{GrafRed}
+\colorlet{titlefgcolor}{GrafBeige}
+\colorlet{blocktitlefgcolor}{GrafRed}
+
+%---------------------- Code-Bsps
+\definecolor{Text}{RGB}{0.36, 0.54, 0.66}
+\definecolor{Element}{RGB}{0.53, 0.66, 0.42}
+\definecolor{Attr}{RGB}{0.6, 0.4, 0.8}
+
+\lstdefinelanguage{XML}
+{
+  morestring=[b]",
+  morestring=[s]{>}{<},
+  morecomment=[s]{<!--}{-->},
+  morekeywords={xmlns,version,type,canonicalRef,metr,real,target}% list your attributes here
+}
+
+\lstset{language=XML,
+showspaces=false,
+showtabs=false,
+basicstyle=\ttfamily,
+columns=fullflexible,
+breaklines=true,
+showstringspaces=false,
+breakatwhitespace=true,
+escapeinside={(*@}{@*)},
+basicstyle=\ttfamily\footnotesize,
+stringstyle=\color{Text},
+commentstyle=\color{Element}\upshape,
+keywordstyle=\color{SpringGreen}\bfseries,
+}
+
+
+%---------------------------- Title-Infos und Package-Wirrwarr
+
+\title{{\rustfamily\bfseries Grazer Repositorium antiker Fabeln}}
+%\author{Prof. Dr. Ursula Gärtner, Sarah Lang}
+%\date{\today}
+\author{Institut für Klassische Philologie, Karl-Franzens-Universität Graz}
+%\institute{Institute of Classics, Karl-Franzens-Universität Graz}
+\titlegraphic{\hspace{2cm}\includegraphics[height=7.5cm, right]{graf-logo-beige.png}}
+
+%----------------------------------------------------------------------
+% Title definieren
+\definetitlestyle{sampletitle}{
+width=\paperwidth, linewidth=2pt, innersep=5pt,
+titletotopverticalspace=0mm, titletoblockverticalspace=10mm
+}{
+\begin{scope}[line width=\titlelinewidth]
+\draw[color=blocktitlebgcolor, fill=titlebgcolor]
+(\titleposleft,\titleposbottom) rectangle (\titleposright,\titlepostop);
+\end{scope}
+}
+%---------------------- und so weiter... geht alles nicht..
+\settitle{\begin{tabular*}{0.8\textwidth}{r p{0.7\textwidth}}%
+\@titlegraphic & \vbox{%
+\centering%
+\color{titlefgcolor} {\bfseries \Huge \sc \@title \par}
+\vspace*{1em}
+{\huge \@author \par} \vspace*{0.5em} {\LARGE \@institute}
+} \end{tabular*}
+}
+
+\usetitlestyle{sampletitle}
+
+
+%line-overflow meiden, dazu hinter begin{doc} \sloppy
+\setlength{\emergencystretch}{2pt}
+
+ %--------------------- PDF-Info
+ \hypersetup{
+    pdftitle={GRaF},
+    pdfauthor={Sarah Lang},
+    pdfsubject={GRaF project},
+    pdfkeywords={GRaF; GAMS repository; ancient fables},
+    colorlinks=false,           % no link border color
+    pdfa,
+}
+
+
+ 
+ %--------------------------------------
+ % new commands für CV-Icons
+ 
+ % 1. Argument=favicon; 2. Argument=Text; 3.+4.=ColorName; 5.Schriftgröße z.B. \Large
+ 
+ % cvicon command
+ \newcommand{\cvicon}[4]{%
+\vspace{0.5pt}\begin{minipage}[t]{0.12\textwidth}\vspace{0pt}%
+ \begin{tabular*}{0.125\textwidth}{c c}%
+{\color{#3}\centering\Large #1} & \phantom{}\\%  
+{\color{#4}\footnotesize\sffamily \parbox[t]{\textwidth}{\centering#2}} & \phantom{}\\%
+\end{tabular*} \end{minipage} \hfill%
+  }
+ 
+  % bigicon command
+ \newcommand{\bigicon}[4]{%
+\vspace{0.5pt}\begin{minipage}[t]{0.12\textwidth}\vspace{0pt}%
+ \begin{tabular*}{0.125\textwidth}{c c}%
+{\color{#3}\centering\Huge #1} & \phantom{}\\%  
+{\color{#4}\Large\sffamily \parbox[t]{\textwidth}{\centering#2}} & \phantom{}\\%
+\end{tabular*} \end{minipage} \hfill%
+  }
+
+  % bullettpoint command
+ \newcommand{\bullettpoint}[5]{%
+\vspace{0.35em}\begin{minipage}[t]{\textwidth}\vspace{0pt}%
+ \begin{tabular*}{0.125\textwidth}{c c}%
+{\color{#3}\centering#5 #1\phantom{}} & {\color{#4}#5\sffamily \parbox[t]{\textwidth}{#2}}\\%  
+\end{tabular*}\vspace{0.15em} \end{minipage}\hfill%
+  }
+%----------------------------------------------------------------
+
+
+
+
+\begin{document}
+
+\maketitle
+
+\block{{\bfseries \huge Das Projekt: Fabula docet -- Wer will schon saure Trauben}?}
+{
+\begin{minipage}[t]{0.45\textwidth}\vspace{0pt}
+
+\subsection*{\Large Warum Fabeln?}
+Wer kennt nicht die ‚sauren Trauben‘? Nicht nur die Fabel vom Fuchs, der die Trauben nicht erreicht, ist wohl bekannt; Fabeln sind überhaupt weit verbreitet. Doch wo stammen sie her? Welche Funktion hatten sie in der Antike? Wie verwenden wir sie heute? 
+Das Sparkling Science-Projekt führt Schülerinnen und Schüler (SuS) der Fächer Latein und Altgriechisch an literatur- und kulturwissenschaftliches Arbeiten heran. Fabeln eignen sich, da sie durch ihre Bildhaftigkeit zur Interpretation auffordern. Zugleich kann man an ihnen gut die produktions- wie rezeptionsgebundene Kontextualisierung erkennen. Hier lässt sich mit SuS herausarbeiten, wie man Texte lesen kann unter der Frage „Was sagt mir das heute?“ oder wie man sich als (angehende) WissenschaftlerInnen fragen muss, was der Text, den man oft erst mühsam erstellen muss, wohl damals für die Rezipienten ausgesagt haben könnte. 
+
+
+\end{minipage}\hfill\hspace{1em}
+\begin{minipage}[t]{0.41\textwidth}\vspace{0pt}
+
+
+\subsection*{\Large GRaF}
+Das Webportal GRaF ist das Herzstück des Projekts; es umfasst neben einführenden Hinweisen zur Fabel sowie zu den Autoren und Werken eine Fabelauswahl (Phaedrus, Aesop, Avian, Babrios) samt textkritischen Anmerkungen, Vokabelangaben, Übersetzung, Sacherklärungen, Paralleltexten, Thesen aus der Sekundärliteratur und Bibliographie. GRaF versteht sich nicht als Lernplattform, sondern bietet einen innovativen Ansatz, der die Prinzipien einer kommentierten und annotierten wissenschaftlichen Digitalen Edition in TEI-XML mit dem neuen Konzept des Digitalen Schulbuchs verbindet. Die Ausgabe wird auf GAMS (Geisteswissenschaftliches Asset Management System; Graz) als dynamische Repräsentation aus langzeitarchivierten Daten verfügbar gemacht. 
+
+
+\end{minipage}\hfill
+\vspace{1.5em}
+
+\bigskip
+
+%------------ das hier ginge auch mit dem nicht TikzPoster-eigenen \colorbox{GrafRed}{Inhalt}, schaut aber nicht ganz so schön aus und passt sich nicht von allein an die Poster-Box an..
+
+\coloredbox[roundedcorners,bgcolor=GrafRed,fgcolor=GrafBeige,framecolor=GrafRed]{
+      \Huge\begin{minipage}[c]{0.95\textwidth} % Start the right-hand side of the page
+      \bigskip
+\bigicon{\faUsers}{Schule}{GrafBeige}{GrafBeige}
+\bigicon{\faLaptop}{Webportal}{GrafBeige}{GrafBeige}
+\bigicon{\faUniversity}{Citizen Science}{GrafBeige}{GrafBeige}
+\bigicon{\faKeyboardO}{{\large Digital Humanities}}{GrafBeige}{GrafBeige}
+\bigicon{\faGraduationCap}{Universität}{GrafBeige}{GrafBeige} \phantom{  }
+
+\end{minipage}
+}
+
+\bigskip
+\vspace{1em}
+
+\begin{minipage}[t]{0.45\textwidth}\vspace{0pt}
+\subsection*{\Large Ziele}
+In der wissenschaftlichen Forschung werden antike Fabeln erst in der neueren Forschung als ausgefeilte Kunst wahrgenommen. In der fachdidaktischen Literatur gab es zwar kontinuierlich Schulausgaben; was jedoch fehlt, sind Werke, die die aktuellen wissenschaftlichen Ergebnisse rezipieren. Das übergeordnete Forschungsziel des Projekts ist daher eine Synthese fachwissenschaftlicher und fachdidaktischer Forschung. Die SuS können aktuelle literaturwissenschaftliche Forschung hautnah miterleben und werden durch die gemeinsame Erstellung einer digitalen Schulausgabe (GRaF) unmittelbar miteinbezogen. Ferner wird das Projekt durch empirische Untersuchungen fachdidaktisch ausgewertet.
+
+\end{minipage}\hfill\hspace{1em}
+\begin{minipage}[t]{0.41\textwidth}\vspace{0pt}
+\subsection*{\Large Schülerkongress \& Internationalität }
+Auf einem Schülerkongress erhalten die SuS Gelegenheit, ihre Ergebnisse kreativ zu gestalten und vorzustellen. Durch die Beteiligung einer Schule aus Brandenburg und die Kooperation mit KollegInnen der Universität Potsdam ist das Projekt international.
+
+\bigskip
+
+\faUniversity\phantom{ } Grazer Latein-Tage
+\phantom{ }\faUsers\phantom{ } SchülerInnen-Kongresse
+\phantom{ }\faGraduationCap\phantom{ } Workshops
+
+
+\end{minipage}\hfill
+
+    \normalsize
+}
+
+
+
+
+\begin{columns}
+   \column{0.36}
+    \block{}{
+    \coloredbox[width=0.3\textwidth,roundedcorners,bgcolor=GrafBeige,fgcolor=GrafBeige,framecolor=GrafBeige]{
+        \begin{tikzfigure}
+            \includegraphics[width=0.07\textwidth]{zim_rot.png}
+            \includegraphics[width=0.07\textwidth]{kfFarbe.jpg}\hspace{0.5em}
+            \includegraphics[width=0.07\textwidth]{graf-logo-rot.png}
+            
+            \vspace{1em}
+            \bigskip
+
+\includegraphics[width=0.07\textwidth]{oead-transp.png}\hspace{0.5em}
+\includegraphics[width=0.07\textwidth]{bmbwf.png}\hspace{0.5em}
+\includegraphics[width=0.07\textwidth]{gamslogo.png}
+
+\vspace{1em}
+            \bigskip
+            \includegraphics[width=0.23\textwidth]{sparklingScience.jpg}
+            
+            \bigskip\phantom{}
+        \end{tikzfigure}
+         }
+    }
+    
+    \column{0.27}
+    \block{{\huge Kontakt}}{
+      \begin{minipage}[t]{0.25\textwidth}\vspace{0pt}
+      \bullettpoint{\faUser}{ Univ.-Prof. Dr.phil. Ursula Gärtner}{}{}{}\\
+\bullettpoint{\faUniversity}{Institut für Klassische Philologie}{}{}{}
+\bullettpoint{\faMapMarker\phantom{}}{Universitätsplatz 3/II, 8010 Graz}{}{}{}
+\bullettpoint{\faPhone}{Tel: +43 (0)316 380 -- 2430}{}{}{}
+\bullettpoint{\faAt}{\protect\url{klassphil@uni-graz.at}}{}{}{}
+
+
+\vspace{2em}
+    \bullettpoint{\faRefresh}{Mitmachen!}{}{}{\Large}\\
+
+    \end{minipage}\hfill
+    }
+    \column{0.32}
+    \block{}
+    {
+    \coloredbox[width=0.29\textwidth,roundedcorners,bgcolor=GrafRed,fgcolor=GrafRed,framecolor=GrafRed]{
+    \begin{tikzfigure}
+            \includegraphics[width=0.23\textwidth]{fabelbuch.jpg}
+        \end{tikzfigure}
+        \phantom{ }
+       } 
+       
+       \bigskip
+      
+      \coloredbox[width=0.29\textwidth,roundedcorners,bgcolor=GrafBeige,fgcolor=GrafRed,framecolor=GrafBeige]{
+     \bullettpoint{\faMousePointer}{\url{https://gams.uni-graz.at/graf}}{}{}{}\\
+\bullettpoint{\faClockO}{\textbf{Laufzeit:} 01.10.2017--30.09.2019}{}{}{}\\
+       } 
+      
+    }
+    
+\end{columns}
+
+\end{document}
